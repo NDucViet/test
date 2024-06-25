@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Pacific - Free Bootstrap 4 Template by Colorlib</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Arizonia&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+  <link rel="stylesheet" th:href="@{css/animate1.css}">
+
+  <link rel="stylesheet" th:href="@{css/owl.carousel.min1.css}">
+  <link rel="stylesheet" th:href="@{css/owl.theme.default.min1.css}">
+  <link rel="stylesheet" th:href="@{css/magnific-popup1.css}">
+
+  <link rel="stylesheet" th:href="@{css/bootstrap-datepicker1.css}">
+  <link rel="stylesheet" th:href="@{css/jquery.timepicker1.css}">
+
+  <link rel="stylesheet" th:href="@{css/flaticon1.css}">
+  <link rel="stylesheet" th:href="@{css/style.css}">
+  <link rel="stylesheet" th:href="@{css/header.css}">
+  <style>
+    .heading{
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 270px;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- header -->
+  <header th:insert="~{User/header2 :: header}"></header>
+  <!-- END nav -->
+
+  <section class="hero-wrap hero-wrap-2 js-fullheight" style="background-image: url('images/bg_1.jpg');">
+    <div class="overlay"></div>
+    <div class="container">
+      <div class="row no-gutters slider-text js-fullheight align-items-end justify-content-center">
+        <div class="col-md-9 ftco-animate pb-5 text-center">
+          <p class="breadcrumbs"><span class="mr-2"><a href="index.html">Home <i
+                  class="fa fa-chevron-right"></i></a></span> <span class="mr-2"><a href="index.html">Blog <i
+                  class="fa fa-chevron-right"></i></a></span> <span>Blog Single <i
+                class="fa fa-chevron-right"></i></span></p>
+          <h1 class="mb-0 bread">Blog Details</h1>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="ftco-section ftco-no-pt ftco-no-pb">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 ftco-animate py-md-5 mt-md-5">
+          <h2 class="mb-3">[[${image1.blog.title}]]</h2>
+          <time class="entry-time" th:text="${image1.blog.dateTimeEdit}"><b></b></time>
+          <p>[[${image1.blog.contentOpen}]]</p>
+          <p>
+            <img th:src="@{/images/{imageUrl}(imageUrl=${image1.imageUrl})}" alt="" class="img-fluid">
+          </p>
+          <p th:text="${image1.imageDescript}"></p>
+          <p>[[${image1.blog.contentBody}]]</p>
+          <p>
+            <img th:src="@{/images/{imageUrl}(imageUrl=${image2.imageUrl})}" alt="" class="img-fluid">
+          </p>
+          <p th:text="${image2.imageDescript}"></p>
+
+          <div class="pt-5 mt-5">
+            <h3 class="mb-5" style="font-size: 20px; font-weight: bold;">[[${commentTotal}]] Comment(s)</h3>
+            <ul class="comment-list">
+              <th:block th:each="comment : ${commentList}">
+                <li class="comment">
+                  <div class="vcard bio">
+                    <img src="/images/person_1.jpg" alt="Image placeholder">
+                  </div>
+                  <div class="comment-body">
+                    <h3>[[${comment.user.username}]]</h3>
+                    <div class="meta">[[${comment.commentDate}]]</div>
+                    <p>[[${comment.content}]]</p>
+                    <!-- <p><a href="#" class="reply">Reply</a></p> -->
+                  </div>
+                </li>
+              </th:block>
+            </ul>
+            <!-- END comment-list -->
+
+            <div class="comment-form-wrap pt-5">
+              <h3 class="mb-5" style="font-size: 20px; font-weight: bold;">Leave a comment</h3>
+              <form th:action="@{/blog/submitComment}" method="post" class="p-5 bg-light">
+                <div class="form-group">
+                  <label for="message">Message</label>
+                  <textarea name="content" id="message" cols="30" rows="10" class="form-control"></textarea>
+                </div>
+                <div class="form-group">
+                  <input type="submit" value="Post Comment" class="btn py-3 px-4 btn-primary">
+                </div>
+                <input type="hidden" name="blogID" th:value="${blogID}" />
+              </form>
+            </div>
+          </div>
+
+        </div> <!-- .col-md-8 -->
+        <div class="col-lg-4 sidebar ftco-animate bg-light py-md-5">
+          <div class="sidebar-box ftco-animate">
+            <h3>Bài viết mới nhất</h3>
+            <th:block th:each="image : ${images}">
+              <div class="block-21 mb-4 d-flex">
+                <a class="blog-img mr-4"  th:href="@{/blog/showBlogDetail/{blogID}(blogID=${image.blog.blogID})}"  th:style="'background-image: url(images/' + ${image.imageUrl} +');'"></a>
+                <div class="text">
+                  <h3 class="heading"><a th:href="@{/blog/showBlogDetail/{blogID}(blogID=${image.blog.blogID})}" >[[${image.blog.title}]]</a>
+                  </h3>
+                  <div class="meta">
+                    <div><a href="#"><span class="fa fa-calendar"></span>[[${image.blog.dateTimeEdit}]]</a></div>
+                    <div><a href="#"><span class="fa fa-comment"></span> [[${commentTotal}]]</a></div>
+                  </div>
+                </div>
+              </div>
+            </th:block>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section> <!-- .section -->
+
+  <section class="ftco-intro ftco-section ftco-no-pt">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-12 text-center">
+          <div class="img" style="background-image: url(images/bg_2.jpg);">
+            <div class="overlay"></div>
+            <h2>We Are Pacific A Travel Agency</h2>
+            <p>We can manage your dream building A small river named Duden flows by their place</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- footer -->
+  <footer th:insert="~{User/footer :: footer}"></footer>
+
+
+
+  <!-- loader -->
+  <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px">
+      <circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee" />
+      <circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10"
+        stroke="#F96D00" />
+    </svg></div>
+
+  <script src="js/jquery.min1.js"></script>
+  <script src="js/jquery-migrate-3.0.1.min1.js"></script>
+  <script src="js/popper.min1.js"></script>
+  <script src="js/bootstrap.min1.js"></script>
+  <script src="js/jquery.easing.1.31.js"></script>
+  <script src="js/jquery.waypoints.min1.js"></script>
+  <script src="js/jquery.stellar.min1.js"></script>
+  <script src="js/owl.carousel.min1.js"></script>
+  <script src="js/jquery.magnific-popup.min1.js"></script>
+  <script src="js/jquery.animateNumber.min1.js"></script>
+  <script src="js/bootstrap-datepicker1.js"></script>
+  <script src="js/scrollax.min1.js"></script>
+  <script
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
+  <script src="js/google-map1.js"></script>
+  <script src="js/main1.js"></script>
+
+</body>
+
+</html>
