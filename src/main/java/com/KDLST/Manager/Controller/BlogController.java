@@ -54,11 +54,6 @@ public class BlogController {
     @Autowired
     private StorageService storageService;
 
-    @GetMapping("/blog")
-    public String blog() {
-        return "Blog/blog";
-    }
-
     @GetMapping("/addBlog")
     public String showBlogAdd(Model model, Blog blog, Image image1, Image image2) {
         model.addAttribute("blog", blog);
