@@ -15,8 +15,6 @@ import com.KDLST.Manager.Model.Entity.User.User;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -34,10 +32,8 @@ import com.KDLST.Manager.Model.Service.ImageBlogService.ImageServiceImplement;
 import com.KDLST.Manager.Model.Service.RateAFbService.CommentServiceImplement;
 import com.KDLST.Manager.Model.Service.UploadFile.StorageService;
 
-import jakarta.servlet.ServletException;
 import java.time.LocalDate;
 
-import java.io.IOException;
 
 @Controller
 @RequestMapping(value = "/blog")
@@ -54,54 +50,8 @@ public class BlogController {
     @Autowired
     private StorageService storageService;
 
-    @GetMapping("/addBlog")
-    public String showBlogAdd(Model model, Blog blog, Image image1, Image image2) {
-        model.addAttribute("blog", blog);
-        model.addAttribute("image1", image1);
-        model.addAttribute("image2", image2);
-        return "User/blogAdd";
-    }
 
-    @PostMapping("/addBlog/action")
-    public String addBlog(Model model,
-            @ModelAttribute("blog") Blog blog1,
-            @ModelAttribute("image1") Image image1,
-            @ModelAttribute("image2") Image image2,
-            @RequestParam("imageUrl1") MultipartFile imageUrl1,
-            @RequestParam("imageUrl2") MultipartFile imageUrl2,
-            @RequestParam(value = "blogTypeID") int blogTypeID,
-            HttpServletResponse response, HttpServletRequest request) throws ServletException, IOException {
-        User user = new User(3, null, null, null, null, null, null, null, null, blogTypeID, null, null, null, null);
-        BlogType blogType = blogTypeServiceImplement.getById(blogTypeID);
-        blog1.setUser(user);
-        blog1.setBlogType(blogType);
-        // set time
-        LocalDate today = LocalDate.now();
-        Date sqlDate = Date.valueOf(today);
-        blog1.setDateTimeEdit(sqlDate);
-        blog1.setStatus(true);
-        // add blog1
-        blogServiceImplement.add(blog1);
-        Blog blogID = blogServiceImplement.getIdLastest();
-        blog1.setBlogID(blogID.getBlogID());
-        // image1
-        String imageUrl1Filename = "";
-        this.storageService.store(imageUrl1);
-        imageUrl1Filename = imageUrl1.getOriginalFilename();
-        image1.setImageUrl(imageUrl1Filename);
-        image1.setBlog(blog1);
-        imageServiceImplement.add(image1);
-
-        // image2
-        String imageUrl2Filename = "";
-        this.storageService.store(imageUrl2);
-        imageUrl2Filename = imageUrl2.getOriginalFilename();
-        image2.setImageUrl(imageUrl2Filename);
-        image2.setBlog(blog1);
-        imageServiceImplement.add(image2);
-        return "User/blogAdd";
-    }
-
+    
     @GetMapping("/getAll")
     public String getAll(Model model) {
         iList = imageServiceImplement.getAll();
@@ -151,16 +101,11 @@ public class BlogController {
     public String showBlogDetail(Model model, @PathVariable("blogID") String blogID) {
         int blogIDInt = Integer.parseInt(blogID);
         ArrayList<Image> imageList = imageServiceImplement.getImagesByBlogID(blogIDInt);
+        Image image1 = imageList.get(0);
+        Image image2 = imageList.get(1);
         ArrayList<Comment> commentList = commentServiceImplement.getCommentByBlogID(blogIDInt);
 
-        ArrayList<Image> imgList = imageServiceImplement.getAll();
-        Collections.sort(imgList, new Comparator<Image>() {
-            @Override
-            public int compare(Image img1, Image img2) {
-                return img2.getBlog().getDateTimeEdit().compareTo(img1.getBlog().getDateTimeEdit());
-            }
-        });
-
+        ArrayList<Image> imgList = imageServiceImplement.getImagesSortDate();
         Set<Image> images = new HashSet<>();
         for (Image image : imgList) {
             images.add(image);
@@ -169,21 +114,12 @@ public class BlogController {
             }
         }
 
+
         int commentTotal = 0;
         if (commentList != null) {
             commentTotal = commentList.size();
         }
-        Image image1 = null;
-        Image image2 = null;
-        if (imageList != null) {
-            for (Image image : imageList) {
-                if (image1 == null) {
-                    image1 = image;
-                } else {
-                    image2 = image;
-                }
-            }
-        }
+     
 
         model.addAttribute("images", images);
         model.addAttribute("commentTotal", commentTotal);

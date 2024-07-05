@@ -5,8 +5,20 @@ import com.KDLST.Manager.Model.Entity.BookingRoom.BookingRoomDetails;
 import com.KDLST.Manager.Model.Entity.ServiceProject.ServiceType;
 import com.KDLST.Manager.Model.Service.BillService.BillDetailsService;
 import com.KDLST.Manager.Model.Service.BillService.BillDetailsServiceImplement;
+import com.KDLST.Manager.Model.Service.BillService.BillService;
+import com.KDLST.Manager.Model.Service.BillService.BillServiceImplement;
 import com.KDLST.Manager.Model.Service.BookingRoomService.BookingRoomDetailsService;
 import com.KDLST.Manager.Model.Service.BookingRoomService.BookingRoomDetailsServiceImplement;
+import com.KDLST.Manager.Model.Service.BookingRoomService.BookingRoomService;
+import com.KDLST.Manager.Model.Service.BookingRoomService.BookingRoomServiceImplement;
+import com.KDLST.Manager.Model.Service.HotelService.RoomTypeService;
+import com.KDLST.Manager.Model.Service.HotelService.RoomTypeServiceImplement;
+import com.KDLST.Manager.Model.Service.ImageBlogService.ImageService;
+import com.KDLST.Manager.Model.Service.ImageBlogService.ImageServiceImplement;
+import com.KDLST.Manager.Model.Service.RateAFbService.CommentService;
+import com.KDLST.Manager.Model.Service.RateAFbService.CommentServiceImplement;
+import com.KDLST.Manager.Model.Service.RateAFbService.FeedBackService;
+import com.KDLST.Manager.Model.Service.RateAFbService.FeedBackServiceImplement;
 import com.KDLST.Manager.Model.Service.ServiceProjectService.ServiceService;
 import com.KDLST.Manager.Model.Service.ServiceProjectService.ServiceServiceImplement;
 import com.KDLST.Manager.Model.Entity.ServiceProject.Services;
@@ -15,16 +27,21 @@ import com.KDLST.Manager.Model.Service.ServiceProjectService.ServiceTypeService;
 import com.KDLST.Manager.Model.Service.ServiceProjectService.ServiceTypeServiceImplement;
 import com.KDLST.Manager.Model.Service.TicketService.TicketService;
 import com.KDLST.Manager.Model.Service.TicketService.TicketServiceImplement;
+import com.KDLST.Manager.Model.Service.UserService.UserService;
+import com.KDLST.Manager.Model.Service.UserService.UserServiceImplement;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import java.util.ArrayList;
+import com.KDLST.Manager.Model.Entity.Bill.Bill;
+import com.KDLST.Manager.Model.Entity.BookingRoom.BookingRoom;
+import com.KDLST.Manager.Model.Entity.Hotel.RoomType;
+import com.KDLST.Manager.Model.Entity.ImageBlog.Image;
+import com.KDLST.Manager.Model.Entity.RateAFb.Comment;
+import com.KDLST.Manager.Model.Entity.User.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 import java.text.SimpleDateFormat;
 
 @Controller
@@ -33,13 +50,25 @@ public class AdminController {
 
     ArrayList<BillDetails> billDetails = new ArrayList<>();
     ArrayList<BookingRoomDetails> bookingRoomDetails = new ArrayList<>();
-
+    ArrayList<User> users = new ArrayList<>();
+    ArrayList<Bill> bills = new ArrayList<>();
+    ArrayList<BookingRoom> bookingRooms = new ArrayList<>();
+    ArrayList<User> cList = new ArrayList<>();
+    ArrayList<User> eList = new ArrayList<>();
     @Autowired
     ServiceService serviceService = new ServiceServiceImplement();
     ServiceTypeService serviceTypeService = new ServiceTypeServiceImplement();
     BillDetailsService billDetailsService = new BillDetailsServiceImplement();
     BookingRoomDetailsService bookingRoomDetailsService = new BookingRoomDetailsServiceImplement();
     TicketService ticketService = new TicketServiceImplement();
+    UserService userService = new UserServiceImplement();
+    BookingRoomService bookingRoomService = new BookingRoomServiceImplement();
+    BillService billService = new BillServiceImplement();
+    RoomTypeService roomTypeService = new RoomTypeServiceImplement();
+    ImageService imageService = new ImageServiceImplement();
+    FeedBackService feedBackService = new FeedBackServiceImplement();
+    CommentService commentService = new CommentServiceImplement();
+    // UserService userService = new UserServiceImplement();
 
     @GetMapping("/")
     public String index(Model model) throws JsonProcessingException {
@@ -71,15 +100,136 @@ public class AdminController {
         ObjectMapper objectMapper = new ObjectMapper();
         String jsonMonthlyTotals = objectMapper.writeValueAsString(monthlyTotals);
         String jsonMonthlyTotals1 = objectMapper.writeValueAsString(monthlyTotalsHotels);
+
+        bookingRooms = bookingRoomService.getAll();
+        users = userService.getAll();
+        bills = billService.getAll();
+        // employee, customer
+        int customer = 0;
+        int employee = 0;
+        for (User user : users) {
+            if (user.getRole().equals("CUSTOMER")) {
+                customer += 1;
+                if (cList.size() < 7) {
+                    cList.add(user);
+                }
+
+            } else if (user.getRole().equals("EMPLOYEE")) {
+                employee += 1;
+                if (eList.size() < 7) {
+                    eList.add(user);
+                }
+            }
+        }
+
+        // service
+        ArrayList<Services> sList = serviceService.getAll();
+        ArrayList<Services> sLists = new ArrayList<>();
+        for (Services s : sList) {
+            if (sLists.size() < 7) {
+                sLists.add(s);
+            }
+        }
+
+        // ticket
+        ArrayList<Ticket> ticketList = ticketService.getAll();
+        ArrayList<Ticket> ticketLists = new ArrayList<>();
+        for (Ticket ticket : ticketList) {
+            if (ticketLists.size() < 7) {
+                ticketLists.add(ticket);
+            }
+        }
+
+        // blog
+        ArrayList<Image> imgList = imageService.getAll();
+        Set<Image> images = new HashSet<>();
+        for (Image image : imgList) {
+            images.add(image);
+            if (images.size() == 6) {
+                break;
+            }
+        }
+
+        // room
+        ArrayList<RoomType> rList = roomTypeService.getAll();
+
+        // feedback
+        // ArrayList<FeedBack> fList = feedBackService.getAll();
+        // ArrayList<FeedBack> fLists = new ArrayList<>();
+        // if (fList != null) {
+        // for (int i = 0; i < 6; i++) {
+        // fLists.add(fList.get(i));
+        // }
+        // }
+
+        // comment
+        ArrayList<Comment> comList = commentService.getAll();
+        ArrayList<Comment> comListLists = new ArrayList<>();
+        for (Comment comment : comList) {
+            if (comListLists.size() < 7) {
+                comListLists.add(comment);
+            }
+        }
         model.addAttribute("data2", jsonMonthlyTotals1);
         model.addAttribute("data1", jsonMonthlyTotals);
+        model.addAttribute("service", serviceService.getAll().size());
+        model.addAttribute("order", bills.size() + bookingRooms.size());
+        model.addAttribute("data2", jsonMonthlyTotals1);
+        model.addAttribute("data1", jsonMonthlyTotals);
+        model.addAttribute("customer", customer);
+        model.addAttribute("employee", employee);
+        model.addAttribute("cList", cList);
+        model.addAttribute("eList", eList);
+        model.addAttribute("serviceList", sLists);
+        // model.addAttribute("feedbackList", fLists);
+        model.addAttribute("commentList", comListLists);
+        model.addAttribute("roomTypeList", rList);
+        model.addAttribute("ticketList", ticketLists);
+        model.addAttribute("blogList", images);
+
         return "Admin/index";
     }
 
+    // ArrayList<User> cList = new ArrayList<>();
+
+    // @Autowired
+    // TicketService ticketService = new TicketServiceImplement();
+
     @GetMapping("/getAllCustomer")
-    public String getAllCustomers(Model model) {
+    public String getAllCustomer(Model model) {
+        cList = userService.getAllCustomer();
+        return getPageCustomer(model, "1");
+    }
+
+    @GetMapping("/getAllCustomer/{page}")
+    public String getPageCustomer(Model model, @PathVariable(value = "page") String currentPage) {
+        ArrayList<User> customerList = new ArrayList<>();
+        int customerPage = 5;
+        int numPages = (int) Math.ceil((float) cList.size() / customerPage);
+        int[] numPage = new int[numPages];
+        for (int i = 0; i < numPages; i++) {
+            numPage[i] = i + 1;
+        }
+        for (int i = (Integer.parseInt(currentPage) - 1) * customerPage; i < Integer.parseInt(currentPage)
+                * customerPage; i++) {
+            if (cList.size() <= i)
+                break;
+            customerList.add(cList.get(i));
+        }
+        model.addAttribute("customerList", customerList);
+        model.addAttribute("numPage", numPage);
+        model.addAttribute("currentPage", Integer.parseInt(currentPage));
+        model.addAttribute("Previous", Integer.parseInt(currentPage) - 1);
+        model.addAttribute("Next", Integer.parseInt(currentPage) + 1);
         return "Admin/customer";
     }
+
+    // @GetMapping("/getAllCustomer")
+    // public String getAllCustomers(Model model) {
+    // // ArrayList<Customer> cList
+
+    // return "Admin/customer";
+    // }
 
     @GetMapping("/getAllEmployee")
     public String getAllEmployees(Model model) {
@@ -185,32 +335,6 @@ public class AdminController {
         model.addAttribute("pieMap", pieMap);
 
         return "Admin/chart";
-    }
-
-    @GetMapping("/getAll")
-    public String getAll(Model model) {
-
-        model.addAttribute("services", serviceService.getAll());
-        model.addAttribute("serviceTypes", serviceTypeService.getAll());
-        return "serviceAdmin";
-    }
-
-    @PostMapping("/add")
-    public String addService(@ModelAttribute Services service, @RequestParam int typeID) {
-        ServiceType serviceType = new ServiceType();
-        serviceType.setServiceTypeID(typeID);
-        service.setServiceTypeID(serviceType);
-        serviceService.add(service);
-        return "redirect:/admin/services";
-    }
-
-    @PostMapping("/update")
-    public String updateService(@ModelAttribute Services service, @RequestParam int typeID) {
-        ServiceType serviceType = new ServiceType();
-        serviceType.setServiceTypeID(typeID);
-        service.setServiceTypeID(serviceType);
-        serviceService.update(service);
-        return "redirect:/admin/services";
     }
 
     // @PostMapping("/delete")

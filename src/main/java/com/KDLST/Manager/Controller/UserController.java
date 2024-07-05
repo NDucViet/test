@@ -69,7 +69,13 @@ public class UserController {
                     HttpSession session = request.getSession(true);
                     session.setAttribute("user", user);
                     user = userServiceImplement.login(userStr);
+                    session.setAttribute("userRole", user.getRole());
                     model.addAttribute("user", user);
+                    if (user.getRole().equals("ADMIN")) {
+                        return "redirect:/admin/";
+                    } else if (user.getRole().equals("EMPLOYEE")) {
+                        return "redirect:/employee/";
+                    }
                     return new IndexController().index(model);
                 }
             }
@@ -78,12 +84,18 @@ public class UserController {
         return "User/login";
     }
 
+    @GetMapping("/403")
+    public String error() {
+        return "User/403";
+    }
+
     // Hàm check form và đăng nhập
     @PostMapping(value = "/login")
     public String toLogin(@ModelAttribute("user") User user1, Model model,
             @RequestParam(value = "agree", required = false) Boolean rememberme,
             HttpServletResponse response,
             HttpServletRequest request) {
+
         User user = new User();
         user1.setAddress(null);
         user1.setAvatar(null);
@@ -97,10 +109,10 @@ public class UserController {
         user1.setIdUser(0);
         user1.setStatus(null);
         user1.setRole(null);
-        System.out.println(user1);
         boolean flag = userServiceImplement.toLogin(user1);
 
         if (Boolean.TRUE.equals(rememberme)) {
+
             if (flag) {
                 Cookie cookie = new Cookie("userCookie", user1.getEmail());
                 user = userServiceImplement.login(user1.getEmail());
@@ -109,6 +121,11 @@ public class UserController {
                 HttpSession session = request.getSession(true);
                 session.setAttribute("user", user);
                 session.setAttribute("userRole", user.getRole());
+                if (user.getRole().equals("ADMIN")) {
+                    return "redirect:/admin/";
+                } else if (user.getRole().equals("EMPLOYEE")) {
+                    return "redirect:/employee/";
+                }
                 return new IndexController().index(model);
             } else {
                 return showLogin(model, request);
@@ -118,6 +135,12 @@ public class UserController {
                 user = userServiceImplement.login(user1.getEmail());
                 HttpSession session = request.getSession(true);
                 session.setAttribute("user", user);
+                session.setAttribute("userRole", user.getRole());
+                if (user.getRole().equals("ADMIN")) {
+                    return "redirect:/admin/";
+                } else if (user.getRole().equals("EMPLOYEE")) {
+                    return "redirect:/employee/";
+                }
                 return new IndexController().index(model);
             } else {
                 return showLogin(model, request);
@@ -132,7 +155,7 @@ public class UserController {
         User user = new User();
         model.addAttribute("user", user);
         model.addAttribute("mess", mess);
-        return "User/register";
+        return "User/login";
     }
 
     // Hàm check form đăng kí
@@ -203,7 +226,7 @@ public class UserController {
     public String toChangePass(@RequestParam(name = "email") String email, Model model) {
         int randomNumber = random.nextInt(90000) + 10000;
         model.addAttribute("code", randomNumber);
-        userServiceImplement.sendMail(email, "Code change password for you",
+        userServiceImplement.sendMail(email, "Nhập code để thay đổi mật khẩu",
                 randomNumber + "");
         user = userServiceImplement.login(email);
         return "User/ToChangePass";
@@ -233,6 +256,7 @@ public class UserController {
 
         HttpSession session = request.getSession();
         session.removeAttribute("user");
+        session.removeAttribute("userRole");
         return "redirect:/";
     }
 
@@ -249,7 +273,7 @@ public class UserController {
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("user");
         model.addAttribute("user", user);
-        return "User/edit";
+        return "User/Edit";
     }
 
     @PostMapping("/edit")
@@ -259,47 +283,69 @@ public class UserController {
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("user");
 
+        // Tạo thư mục nếu chưa tồn tại
+        Path uploadDirPath = Paths.get(uploadPath);
+        Path liveUploadDirPath = Paths.get(liveUploadPath);
+
+        if (!Files.exists(uploadDirPath)) {
+            Files.createDirectories(uploadDirPath);
+        }
+
+        if (!Files.exists(liveUploadDirPath)) {
+            Files.createDirectories(liveUploadDirPath);
+        }
+
         if (!file.isEmpty()) {
-            // Delete the old image file if it exists
+            // Xóa tệp ảnh cũ nếu tồn tại
             if (user.getAvatar() != null && !user.getAvatar().isEmpty()) {
                 Path oldFilePath = Paths.get(uploadPath, user.getAvatar());
                 Path oldLiveFilePath = Paths.get(liveUploadPath, user.getAvatar());
-                Files.deleteIfExists(oldFilePath);
-                Files.deleteIfExists(oldLiveFilePath);
+
+                try {
+                    Files.deleteIfExists(oldFilePath);
+                    Files.deleteIfExists(oldLiveFilePath);
+                } catch (IOException e) {
+                    // Xử lý ngoại lệ nếu tệp không thể xóa
+                    System.err.println("Could not delete file: " + e.getMessage());
+                }
             }
 
-            // Save the new image file
+            // Lưu tệp ảnh mới
             Path fileNameAndPath = Paths.get(uploadPath, file.getOriginalFilename());
             Path liveFileNameAndPath = Paths.get(liveUploadPath, file.getOriginalFilename());
-            Files.write(fileNameAndPath, file.getBytes());
-            Files.write(liveFileNameAndPath, file.getBytes());
-            user1.setAvatar(file.getOriginalFilename());
+
+            try {
+                Files.write(fileNameAndPath, file.getBytes());
+                Files.write(liveFileNameAndPath, file.getBytes());
+                user1.setAvatar(file.getOriginalFilename());
+            } catch (IOException e) {
+                // Xử lý ngoại lệ nếu tệp không thể lưu
+                System.err.println("Could not save file: " + e.getMessage());
+            }
         } else {
-            // Retain the existing image if no new file is uploaded
+            // Giữ lại ảnh hiện tại nếu không có tệp mới được tải lên
+            user1.setAvatar(user.getAvatar());
             user.setAvatar(user.getAvatar());
         }
 
+        // Sao chép các trường khác từ user trong session sang user1
         user1.setRole(user.getRole());
         user1.setCustomerType(user.getCustomerType());
         user1.setIdUser(user.getIdUser());
         user1.setStatus(user.getStatus());
         user1.setEmail(user.getEmail());
+        user1.setPassword(user.getPassword());
+        user1.setCardID(user.getCardID());
         userServiceImplement.update(user1);
 
         session.removeAttribute("user");
         session.setAttribute("user", user1);
         return "User/UserProfile";
     }
-    //
 
-    @GetMapping("/about")
-    public String about() {
-        return "User/about";
-    }
-
-    @GetMapping("/contact")
-    public String contact() {
-        return "User/contact";
+    @GetMapping("/showPassword")
+    public String showPassword() {
+        return "User/showPass";
     }
 
 }

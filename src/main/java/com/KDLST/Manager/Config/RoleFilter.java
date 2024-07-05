@@ -1,9 +1,10 @@
 package com.KDLST.Manager.Config;
 
 import java.io.IOException;
-
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import jakarta.servlet.Filter;
 import jakarta.servlet.FilterChain;
@@ -17,48 +18,107 @@ import jakarta.servlet.http.HttpServletResponse;
 @WebFilter("/*")
 public class RoleFilter implements Filter {
 
-    private static final List<String> PUBLIC_PATH = Arrays.asList("/user/login", "/user/register", "/user/showRegister",
-            "/user/showLogin", "/user/about", "/user/contact", "/user/changePassword", "/user/toChangePass",
-            "/user/changePass", "/user/logout",
-            "/blog", "/css", "/images", "/js");
+    private static final List<String> PUBLIC_PATH = new CopyOnWriteArrayList<>(Arrays.asList(
+            "/user/showLogin", "/user/login", "/user/showRegister", "/user/register",
+            "/user/toAdd", "/user/changePass",
+            "/user/toChangePass", "/user/changePassword", "/ticket/getAll", "/hotel",
+            "/service/getAll",
+            "/service/getByID", "/service/searchService", "/service/serviceSuggestion",
+            "/about", "/contact", "/hotel/about", "/hotel/contactUs", "/hotel/getDate",
+            "/hotel/getRoom",
+            "/hotel/getRoomType", "/hotel/getRoomByRoomType", "/hotel/getAllRoom",
+            "/hotel/searchRoomType",
+            "/hotel/roomTypeSuggestion", "/blog/getAll", "/blog/getByID",
+            "/blog/showBlogDetail", "/css", "/images", "/js", "/user/403"));
 
-    private static final List<String> USER_PATH = Arrays.asList("/login", "/register", "/showRegister",
-            "/showLogin", "/about", "/contact", "/changePassword", "/toChangePass", "/changePass");
+    private static final List<String> USER_PATH = new CopyOnWriteArrayList<>(Arrays.asList(
+            "/user/logout", "/user/profile", "/user/showEdit", "/user/edit",
+            "/hotel/history", "/hotel/checkOut",
+            "/hotel/vnpay-payment-return", "/cart/", "/cart/allItem", "/cart/delete",
+            "/cart/update", "/cart/add",
+            "/cart/checkOut", "/cart/vnpay-payment-return", "/cart/history",
+            "/service/addFeedback",
+            "/service/deleteFeedback", "/blog/submitComment", "/hotel/", "/css",
+            "/images", "/js", "/user/403"));
 
-    private static final List<String> EMPLOY_PATH = Arrays.asList("/login", "/register", "/showRegister",
-            "/showLogin", "/about", "/contact", "/changePassword", "/toChangePass", "/changePass");
+    private static final List<String> EMPLOY_PATH = new CopyOnWriteArrayList<>(Arrays.asList(
+            "/employee/", "/employee/addBlog", "/employee/addBlog/action", "/css",
+            "/images", "/js", "/user/403"));
 
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+    public void doFilter(ServletRequest request, ServletResponse response,
+            FilterChain chain)
             throws IOException, ServletException {
-        // TODO Auto-generated method stub
+
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         HttpServletResponse httpResponse = (HttpServletResponse) response;
         String path = httpRequest.getServletPath();
-        if (PUBLIC_PATH.stream().anyMatch(path::startsWith) || path.equals("/")) {
-            System.out.println("cc");
+        System.out.println(path);
+
+        if (isStaticResource(path) || isPublicPath(path) || path.equals("/")) {
             chain.doFilter(request, response);
             return;
         }
+
         String userRole = (String) httpRequest.getSession().getAttribute("userRole");
-        if (userRole == null) {
-            // Nếu người dùng không đăng nhập hoặc không có vai trò, chuyển hướng đến trang
-            // đăng nhập
-            httpResponse.sendRedirect("/user/showLogin");
-        } else if ("ADMIN".equals(userRole)) {
-            chain.doFilter(request, response);
-        } else if ("USER".equals(userRole)) {
-            if ("/index".equals(path)) {
-                // Cho phép USER truy cập các URL cụ thể
+        System.out.println(userRole);
+        if (userRole != null) {
+            if (userRole.equals("ADMIN")) {
                 chain.doFilter(request, response);
+                return;
+            } else if (userRole.equals("EMPLOYEE")) {
+                if (isEmployPath(path)) {
+                    chain.doFilter(request, response);
+                    return;
+                } else {
+                    httpResponse.sendRedirect("/user/403");
+                    return;
+                }
+            } else if (userRole.equals("CUSTOMER")) {
+                if (isUserPath(path)) {
+                    chain.doFilter(request, response);
+                    return;
+                } else {
+                    httpResponse.sendRedirect("/user/403");
+                    return;
+                }
             } else {
-                // Chặn truy cập và điều hướng đến trang lỗi hoặc đăng nhập
-                httpResponse.sendRedirect("/showLogin");
+                httpResponse.sendRedirect("/user/403");
+                return;
             }
+        } else if (isStaticResource(path) || isPublicPath(path) || path.equals("/")) {
+            chain.doFilter(request, response);
+            return;
         } else {
-            // Chặn truy cập và điều hướng đến trang đăng nhập nếu không có vai trò
-            httpResponse.sendRedirect("/showLogin");
+            httpResponse.sendRedirect("/user/showLogin");
+            return;
         }
     }
 
+    private boolean isPublicPath(String path) {
+        for (String string : PUBLIC_PATH) {
+            if (path.contains(string)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean isUserPath(String path) {
+        System.out.println(path);
+        return USER_PATH.stream().anyMatch(path::equals);
+    }
+
+    private boolean isEmployPath(String path) {
+        return EMPLOY_PATH.stream().anyMatch(path::equals);
+    }
+
+    private boolean isStaticResource(String path) {
+        if (path.contains("/static/") || path.contains("/css/") ||
+                path.contains("/images/") || path.contains("/js/")
+                || path.contains("/fonts/")) {
+            return true;
+        }
+        return false;
+    }
 }

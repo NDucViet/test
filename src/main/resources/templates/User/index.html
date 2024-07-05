@@ -171,89 +171,124 @@
 		/* Điều chỉnh theo nhu cầu của bạn */
 	}
 
-	.custom-modal {
-		position: fixed;
-		top: 50%;
-		left: 50%;
-		transform: translate(-50%, -50%);
-		width: 100%;
-		max-height: 90vh;
-		/* Để modal không chiếm toàn bộ chiều cao màn hình */
-		overflow-y: auto;
-		/* Để modal có thể cuộn nếu nội dung quá dài */
-		z-index: 1050;
-		/* Để đảm bảo modal xuất hiện trên các thành phần khác */
+	/* Giữ lại các thuộc tính đã có */
+	.trigger {
+		background-color: black;
+		color: red;
 	}
 
-	.modal-dialog {
-		margin: 0;
-		max-width: 100%;
+	.modal,
+	.fade {
+		background-color: lightgray;
+		padding-left: 15px;
+		padding-right: 15px;
 	}
 
 	.modal-content {
-		border-radius: 0;
+		background: transparent;
+		border: none;
+		padding: 0 19px;
 	}
 
-	@media (min-width: 768px) {
-		.custom-modal {
-			width: 50%;
-		}
+	.close {
+		position: relative;
+		top: 48px;
+		left: 13px;
+		z-index: 1;
+		font-size: 30px;
+		font-weight: 100;
+		line-height: 1;
+		color: gray;
 	}
 
-	.custom-modal:not(:first-child) {
-		margin-bottom: 10px;
-		/* Khoảng cách giữa các modal */
+	.modal-header {
+		border: none;
 	}
 
-	.modal-body img {
-		height: 30rem;
-		/* Increase the image height */
-		width: 40rem;
-		/* Increase the image width */
+	.modal-body {
+		border: none;
+		background-color: white;
+		padding-bottom: 5px;
+		display: flex;
+		flex-wrap: nowrap;
+	}
+
+	.ad img {
+		width: 100%;
+		height: 100%;
 		object-fit: cover;
-		margin-right: 1rem;
+		/* Đảm bảo ảnh không bị cắt */
 	}
 
-	.location {
-		white-space: nowrap;
-		overflow: hidden;
-		text-overflow: ellipsis;
-		max-width: 300px;
-	}
-
-	.custom-modal {
-		position: fixed;
-		top: 50%;
-		left: 50%;
-		transform: translate(-50%, -50%);
-		width: 100%;
-		max-height: 90vh;
-		/* Để modal không chiếm toàn bộ chiều cao màn hình */
+	.details {
 		overflow-y: auto;
-		/* Để modal có thể cuộn nếu nội dung quá dài */
-		z-index: 1050;
-		/* Để đảm bảo modal xuất hiện trên các thành phần khác */
+		max-height: 80vh;
+		/* Đặt giới hạn chiều cao cho phần nội dung */
 	}
 
-	.modal-dialog {
-		margin: 0;
-		max-width: 100%;
+	.modal-footer {
+		border: none;
 	}
 
-	.modal-content {
-		border-radius: 0;
+	.btn.focus,
+	.btn:focus {
+		outline: 0;
+		box-shadow: none !important;
 	}
 
-	@media (min-width: 768px) {
-		.custom-modal {
-			width: 50%;
+	.close.focus,
+	.close:focus {
+		outline: 0;
+		box-shadow: none !important;
+	}
+
+	.hurry {
+		margin-top: 30px;
+	}
+
+	.booking {
+		background-color: white;
+		border: 2px solid lightgray;
+		width: 150px;
+		border-radius: 0px;
+	}
+
+	.booking:hover {
+		background-color: #ECEFF1;
+		border: 2px solid black;
+	}
+
+	@media (min-width: 599px) {
+		.modal-dialog {
+			max-width: 80rem;
+			/* Tăng kích thước tối đa của modal */
+			width: 70rem;
+			/* Đặt chiều rộng modal */
+		}
+
+		.details {
+			padding: 0 114px;
+		}
+
+		.off {
+			position: absolute;
+			bottom: 150px;
+			left: 25px;
 		}
 	}
 
-	.custom-modal:not(:first-child) {
-		margin-bottom: 10px;
-		/* Khoảng cách giữa các modal */
+	@media (min-width: 992px) {
+		.ad {
+			flex: 0 0 40%;
+			max-width: 40%;
+		}
+
+		.details {
+			flex: 0 0 60%;
+			max-width: 60%;
+		}
 	}
+
 
 	/* .pagination {
     display: flex;
@@ -280,6 +315,12 @@
     color: white;
     border-color: #007bff;
   } */
+	.location {
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		max-width: 300px;
+	}
 
 	.truncate {
 		display: block;
@@ -302,9 +343,9 @@
 		<div class="container">
 			<div class="row no-gutters slider-text js-fullheight align-items-center" data-scrollax-parent="true">
 				<div class="col-md-7 ftco-animate">
-					<span class="subheading">Welcome to Ngu Hanh Hill</span>
-					<h1 class="mb-4">Discover Your Favorite Place with Us</h1>
-					<p class="caps">Travel to the any corner of the world, without going around in circles</p>
+					<span class="subheading">Chào mừng bạn đến với Ngũ Hành Hill</span>
+					<h1 class="mb-4">Khám phá địa điểm yêu thích của bạn với bạn</h1>
+					<p class="caps">Khám phá vẻ đẹp thiên nhiên</p>
 				</div>
 				<a href="../../static/video/1.mp4"
 					class="icon-video popup-vimeo d-flex align-items-center justify-content-center mb-4">
@@ -336,7 +377,7 @@
 
 								<div class="tab-content" id="v-pills-tabContent">
 
-									<div class="tab-pane fade show active" id="v-pills-1" role="tabpanel"
+									<div class="tab-pane  show active" id="v-pills-1" role="tabpanel"
 										aria-labelledby="v-pills-nextgen-tab">
 										<div class="row no-gutters search-property-1">
 											<div class="col-lg-9 d-flex position-relative">
@@ -345,7 +386,7 @@
 													<div class="form-field">
 														<div class="icon"><span class="fa fa-search"></span></div>
 														<input type="search" class="form-control" id="keywordService"
-															placeholder="Search service" oninput="handleInputService()"
+															placeholder="Nhập dịch vụ" oninput="handleInputService()"
 															onkeyup="handleSearchService(event)">
 														<div id="suggestionBoxForService" style="border: none;"></div>
 													</div>
@@ -357,7 +398,7 @@
 											<div class="col-lg-3 d-flex">
 												<div class="form-group d-flex w-100 border-0">
 													<div class="form-field w-100 align-items-center d-flex">
-														<input type="button" autocomplete="off" value="Search"
+														<input type="button" autocomplete="off" value="Tìm Kiếm"
 															onclick="searchService()"
 															class="align-self-stretch form-control btn btn-primary p-0">
 													</div>
@@ -376,7 +417,7 @@
 													<div class="form-field">
 														<div class="icon"><span class="fa fa-search"></span></div>
 														<input type="search" autocomplete="off" class="form-control"
-															id="keywordRoomType" placeholder="Search type of room"
+															id="keywordRoomType" placeholder="Nhập loại phòng"
 															oninput="handleInputRoomType()"
 															onkeyup="handleSearchRoomType(event)">
 														<div id="suggestionBoxForRoomType" style="border: none;"></div>
@@ -389,7 +430,7 @@
 											<div class="col-lg-3 d-flex">
 												<div class="form-group d-flex w-100 border-0">
 													<div class="form-field w-100 align-items-center d-flex">
-														<input type="button" value="Search" onclick="SearchRoomType()"
+														<input type="button" value="Tìm kiếm" onclick="SearchRoomType()"
 															class="align-self-stretch form-control btn btn-primary p-0">
 													</div>
 												</div>
@@ -437,7 +478,6 @@
 							như một cuộc hành trình kỳ diệu, mời gọi bạn trải nghiệm sự hòa hợp của thiên nhiên
 							ở dạng tinh khiết nhất của nó. Hãy đến và đắm mình trong chuyến trốn thoát thiên đường này,
 							nơi những kỳ quan của thế giới tự nhiên dễ dàng thu hút các giác quan của bạn.</p>
-						<p><a href="#" class="btn btn-primary py-3 px-4">Search Destination</a></p>
 					</div>
 				</div>
 				<div class="col-md-6">
@@ -539,41 +579,36 @@
 		</div>
 	</section>
 	<div th:each="service : ${sListAll}">
-		<div th:id="'modal' + ${service.key.key.serviceID}" class="modal fade custom-modal" data-bs-backdrop="static"
-			data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-			<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+		<div class="modal fade" th:id="'modal' + ${service.key.key.serviceID}" tabindex="-1" role="dialog"
+			aria-labelledby="exampleModalLabel" aria-hidden="true">
+			<div class="modal-dialog" role="document">
 				<div class="modal-content">
 					<div class="modal-header">
-						<h3 th:text="${service.key.key.serviceTypeID.serviceName}"></h3>
-						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
 					</div>
-					<div class="modal-body">
-						<div class="mb-3">
-							<h3 style="color: black; cursor: pointer;" onmouseover="this.style.color='orange'"
-								onmouseout="this.style.color='black'" th:text="${service.key.key.serviceName}"></h3>
-							<i class="fa-solid fa-star" style="color: #FF9529;display: inline;font-size: larger;"></i>
-							<p class="h5" th:text="${service.value}" style="display: inline;color: #FF9529;"></p>
+					<div class="modal-body p-0 row">
+						<div class="col-12 col-lg-4 ad p-0">
+							<img th:src="@{/images/{image}(image=${service.key.key.image})}" class="modal-image">
 						</div>
-						<div class="mb-3 text-center">
-							<img th:src="@{/images/{image}(image=${service.key.key.image})}" alt="Service Image"
-								class="img-fluid">
-						</div>
-						<div>
-							<p><strong>Description:</strong></p>
-							<p th:text="${service.key.key.description}"></p>
-						</div>
-
-						<div style="padding-top: 20px;">
-							<hr style="background-color: black;">
-							<div class="row">
-								<div class="col-sm-5"></div>
-								<div class="col-sm-7" style="padding-top: 20px;">
-									<strong class="h4">ĐÁNH GIÁ</strong>
-								</div>
+						<div class="details col-12 col-lg-8">
+							<div class="heading d-flex">
+								<h3 th:text="${service.key.key.serviceTypeID.serviceName}"></h3>
 							</div>
-							<div class="row">
-								<div class="col-sm-2"></div>
-								<div class="col-sm-8">
+							<h3 style="color: black; cursor: pointer;" th:text="${service.key.key.serviceName}"></h3>
+							<p><small class="text-muted" th:text="${service.key.key.description}"></small></p>
+							<div class="text-muted hurry"><small>Hurry. book now. Limited time offer</small></div>
+							<div class="d-flex mt-2 mb-5">
+								<div style="padding-top: 20px;">
+									<hr style="background-color: black;">
+									<div class="row">
+										<div class="col-sm-5"></div>
+										<div class="col-sm-7" style="padding-top: 20px;">
+											<strong class="h4">Đánh Giá</strong>
+										</div>
+									</div>
+
 									<div class="d-flex flex-row add-comment-section mt-4 mb-4"
 										th:if="${session.user != null}">
 										<img class="img-fluid img-responsive rounded-circle mr-2"
@@ -583,7 +618,7 @@
 											th:id="|content${service.key.key.serviceID}|">
 										<button class="btn" style="background-color: black; color: #fafafa;"
 											type="button"
-											th:onclick="|addFeedback(${service.key.key.serviceID})|">Send</button>
+											th:onclick="|addFeedback(${service.key.key.serviceID})|">Gửi</button>
 									</div>
 									<div>
 										<div class="media g-mb-30 media-comment noneComment"
@@ -592,7 +627,6 @@
 											<p>Không có bình luận.</p>
 										</div>
 									</div>
-
 									<div th:each="feedback : ${service.key.value}">
 										<div class="media g-mb-30 media-comment"
 											th:id="|feedback${feedback.feedbackID}|">
@@ -614,7 +648,7 @@
 														style="color: black;float: right;cursor: pointer; border: none;"
 														th:if="${session.user.idUser == feedback.user.idUser}"><i
 															class="fa-solid fa-trash" style="color: black;"></i>
-														Remove</button>
+														Xóa </button>
 												</div>
 											</div>
 										</div>
@@ -658,12 +692,12 @@
 						<div class="col-md-6 pl-md-5 py-5">
 							<div class="row justify-content-start pb-3">
 								<div class="col-md-12 heading-section ftco-animate">
-									<span class="subheading">About Us</span>
-									<h2 class="mb-4">Make Your Tour Memorable and Safe With Us</h2>
-									<p>Far far away, behind the word mountains, far from the countries Vokalia and
-										Consonantia, there live the blind texts. Separated they live in Bookmarksgrove
-										right at the coast of the Semantics, a large language ocean.</p>
-									<p><a href="#" class="btn btn-primary">Book Your Destination</a></p>
+									<span class="subheading">Giới thiệu</span>
+									<h2 class="mb-4">Làm cho chuyến tham quan của bạn trở nên đáng nhớ và an toàn</h2>
+									<p>Thiên đường bình dị này là một thiên đường đích thực, nơi những giai điệu của
+										thiên nhiên
+										khiến bạn say mê .</p>
+									<p><a href="#" class="btn btn-primary">Đặt ngay</a></p>
 								</div>
 							</div>
 						</div>
@@ -673,133 +707,47 @@
 		</div>
 	</section>
 
-	<section class="ftco-section testimony-section bg-bottom" style="background-image: url(images/bg_1.jpg);">
-		<div class="overlay"></div>
+
+
+	<section class="ftco-section">
 		<div class="container">
 			<div class="row justify-content-center pb-4">
-				<div class="col-md-7 text-center heading-section heading-section-white ftco-animate">
-					<span class="subheading">Testimonial</span>
-					<h2 class="mb-4">Tourist Feedback</h2>
+				<div class="col-md-12 heading-section text-center ftco-animate">
+					<span class="subheading">Tin tức</span>
+					<h2 class="mb-4">Tin tức mới nhất</h2>
 				</div>
 			</div>
-			<div class="row ftco-animate">
-				<div class="col-md-12">
-					<div class="carousel-testimony owl-carousel">
-						<div class="item">
-							<div class="testimony-wrap py-4">
-								<div class="text">
-									<p class="star">
-										<span class="fa fa-star"></span>
-										<span class="fa fa-star"></span>
-										<span class="fa fa-star"></span>
-										<span class="fa fa-star"></span>
-										<span class="fa fa-star"></span>
-									</p>
-									<p class="mb-4">Far far away, behind the word mountains, far from the countries
-										Vokalia and Consonantia, there live the blind texts.</p>
-									<div class="d-flex align-items-center">
-										<div class="user-img" style="background-image: url(images/person_1.jpg)"></div>
-										<div class="pl-3">
-											<p class="name">Roger Scott</p>
-											<span class="position">Marketing Manager</span>
-										</div>
-									</div>
+			<!-- Blog-->
+			<div class="row">
+				<!-- Sử dụng vòng lặp Thymeleaf để duyệt qua danh sách blog -->
+				<div class="col-md-4 ftco-animate" th:each="blog : ${blogList}">
+					<div class="blog-entry">
+						<a th:href="@{/blog/showBlogDetail/{id}(id=${blog.blog.blogID})}" class="block-20"
+							th:style="'background-image: url(images/' + ${blog.imageUrl} + ');'">
+						</a>
+						<div class="text">
+							<div class="d-flex align-items-center mb-4 topp">
+								<div class="two">
+									<span class="yr">Tin tức</span>
 								</div>
 							</div>
-						</div>
-						<div class="item">
-							<div class="testimony-wrap py-4">
-								<div class="text">
-									<p class="star">
-										<span class="fa fa-star"></span>
-										<span class="fa fa-star"></span>
-										<span class="fa fa-star"></span>
-										<span class="fa fa-star"></span>
-										<span class="fa fa-star"></span>
-									</p>
-									<p class="mb-4">Far far away, behind the word mountains, far from the countries
-										Vokalia and Consonantia, there live the blind texts.</p>
-									<div class="d-flex align-items-center">
-										<div class="user-img" style="background-image: url(images/person_2.jpg)"></div>
-										<div class="pl-3">
-											<p class="name">Roger Scott</p>
-											<span class="position">Marketing Manager</span>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="item">
-							<div class="testimony-wrap py-4">
-								<div class="text">
-									<p class="star">
-										<span class="fa fa-star"></span>
-										<span class="fa fa-star"></span>
-										<span class="fa fa-star"></span>
-										<span class="fa fa-star"></span>
-										<span class="fa fa-star"></span>
-									</p>
-									<p class="mb-4">Far far away, behind the word mountains, far from the countries
-										Vokalia and Consonantia, there live the blind texts.</p>
-									<div class="d-flex align-items-center">
-										<div class="user-img" style="background-image: url(images/person_3.jpg)"></div>
-										<div class="pl-3">
-											<p class="name">Roger Scott</p>
-											<span class="position">Marketing Manager</span>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="item">
-							<div class="testimony-wrap py-4">
-								<div class="text">
-									<p class="star">
-										<span class="fa fa-star"></span>
-										<span class="fa fa-star"></span>
-										<span class="fa fa-star"></span>
-										<span class="fa fa-star"></span>
-										<span class="fa fa-star"></span>
-									</p>
-									<p class="mb-4">Far far away, behind the word mountains, far from the countries
-										Vokalia and Consonantia, there live the blind texts.</p>
-									<div class="d-flex align-items-center">
-										<div class="user-img" style="background-image: url(images/person_1.jpg)"></div>
-										<div class="pl-3">
-											<p class="name">Roger Scott</p>
-											<span class="position">Marketing Manager</span>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="item">
-							<div class="testimony-wrap py-4">
-								<div class="text">
-									<p class="star">
-										<span class="fa fa-star"></span>
-										<span class="fa fa-star"></span>
-										<span class="fa fa-star"></span>
-										<span class="fa fa-star"></span>
-										<span class="fa fa-star"></span>
-									</p>
-									<p class="mb-4">Far far away, behind the word mountains, far from the countries
-										Vokalia and Consonantia, there live the blind texts.</p>
-									<div class="d-flex align-items-center">
-										<div class="user-img" style="background-image: url(images/person_2.jpg)"></div>
-										<div class="pl-3">
-											<p class="name">Roger Scott</p>
-											<span class="position">Marketing Manager</span>
-										</div>
-									</div>
-								</div>
-							</div>
+							<h3 class="heading">
+								<a th:href="@{/blog/showBlogDetail/{id}(id=${blog.blog.blogID})}"
+									th:text="${blog.blog.title}"></a>
+							</h3>
+							<p>
+								<a th:href="@{/blog/showBlogDetail/{id}(id=${blog.blog.blogID})}"
+									class="btn btn-primary">Đọc Thêm</a>
+							</p>
 						</div>
 					</div>
 				</div>
+				<!-- Kết thúc vòng lặp Thymeleaf -->
 			</div>
+			<!-- Kết thúc Blog-->
 		</div>
 	</section>
+
 
 	<section class="ftco-intro ftco-section ftco-no-pt">
 		<div class="container">
@@ -807,8 +755,8 @@
 				<div class="col-md-12 text-center">
 					<div class="img" style="background-image: url(images/bg_2.jpg);">
 						<div class="overlay"></div>
-						<h2>We Are Pacific A Travel Agency</h2>
-						<p>We can manage your dream building A small river named Duden flows by their place</p>
+						<h2>Chúng tôi là Ngũ Hành Hill</h2>
+						<p>Chúng tôi sẽ mang đến cho bạn những trải nghiệm đáng quý nhất</p>
 					</div>
 				</div>
 			</div>
@@ -832,14 +780,14 @@
 								alt="Room Image">
 						</div>
 						<div>
-							<p><strong>Price:</strong> <span th:text="${roomType.price} + ' VND'"></span></p>
-							<p><strong>Description:</strong> <span th:text="${roomType.details}"></span></p>
+							<p><strong>Giá:</strong> <span th:text="${roomType.price} + ' VND'"></span></p>
+							<p><strong>Mô tả:</strong> <span th:text="${roomType.details}"></span></p>
 							<div class="mt-4">
 								<form th:action="@{/hotel/getRoom}" th:method="get" class="d-inline-block">
 									<input type="hidden" name="roomType" th:value="${roomType.roomTypeID}">
 									<input type="hidden" name="hiddenStartDate" th:value="${startDate}">
 									<input type="hidden" name="hiddenEndDate" th:value="${endDate}">
-									<button type="submit" class="btn btn-primary">Book Room</button>
+									<button type="submit" class="btn btn-primary">Đặt ngay</button>
 								</form>
 							</div>
 						</div>
