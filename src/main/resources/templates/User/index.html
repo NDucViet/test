@@ -322,6 +322,7 @@
 		max-width: 300px;
 	}
 
+
 	.truncate {
 		display: block;
 		overflow: hidden;
@@ -377,7 +378,7 @@
 
 								<div class="tab-content" id="v-pills-tabContent">
 
-									<div class="tab-pane  show active" id="v-pills-1" role="tabpanel"
+									<div class="tab-pane show active" id="v-pills-1" role="tabpanel"
 										aria-labelledby="v-pills-nextgen-tab">
 										<div class="row no-gutters search-property-1">
 											<div class="col-lg-9 d-flex position-relative">
@@ -553,21 +554,21 @@
 				<div class="col-xs-12 col-sm-6 col-md-4 ftco-animate" th:each="service : ${sList}">
 					<div class="project-wrap">
 						<a href="#" class="img"
-							th:style="'background-image: url(images/' + ${service.key.key.image} + ');'">
+							th:style="'background-image: url(images/' + ${service.key.image} + ');'">
 							<span class="price">Đề xuất</span>
 						</a>
 						<div class="text p-4">
 							<h3>
 								<button class="location" data-bs-toggle="modal"
-									th:data-bs-target="'#modal' + ${service.key.key.serviceID}"
-									th:text="${service.key.key.serviceName}"
+									th:data-bs-target="'#modal' + ${service.key.serviceID}"
+									th:text="${service.key.serviceName}"
 									style="border: none; background-color: white;"></button>
 							</h3>
 							<p class="location"><span class="fa fa-map-marker"></span>
-								[[${service.key.key.description}]]</p>
+								[[${service.key.description}]]</p>
 							<ul>
 								<li><span class="flaticon-mountains"></span>
-									<a href="#" th:text="${service.key.key.serviceTypeID.serviceName}"></a>
+									<a href="#" th:text="${service.key.serviceTypeID.serviceName}"></a>
 								</li>
 							</ul>
 						</div>
@@ -579,7 +580,7 @@
 		</div>
 	</section>
 	<div th:each="service : ${sListAll}">
-		<div class="modal fade" th:id="'modal' + ${service.key.key.serviceID}" tabindex="-1" role="dialog"
+		<div class="modal fade" th:id="'modal' + ${service.key.serviceID}" tabindex="-1" role="dialog"
 			aria-labelledby="exampleModalLabel" aria-hidden="true">
 			<div class="modal-dialog" role="document">
 				<div class="modal-content">
@@ -590,15 +591,14 @@
 					</div>
 					<div class="modal-body p-0 row">
 						<div class="col-12 col-lg-4 ad p-0">
-							<img th:src="@{/images/{image}(image=${service.key.key.image})}" class="modal-image">
+							<img th:src="@{/images/{image}(image=${service.key.image})}" class="modal-image">
 						</div>
 						<div class="details col-12 col-lg-8">
 							<div class="heading d-flex">
-								<h3 th:text="${service.key.key.serviceTypeID.serviceName}"></h3>
+								<h3 th:text="${service.key.serviceTypeID.serviceName}"></h3>
 							</div>
-							<h3 style="color: black; cursor: pointer;" th:text="${service.key.key.serviceName}"></h3>
-							<p><small class="text-muted" th:text="${service.key.key.description}"></small></p>
-							<div class="text-muted hurry"><small>Hurry. book now. Limited time offer</small></div>
+							<h3 style="color: black; cursor: pointer;" th:text="${service.key.serviceName}"></h3>
+							<p><small class="text-muted" th:text="${service.key.description}"></small></p>
 							<div class="d-flex mt-2 mb-5">
 								<div style="padding-top: 20px;">
 									<hr style="background-color: black;">
@@ -615,19 +615,19 @@
 											th:src="@{'/images/'+ ${session.user.avatar}}"
 											style="width: 38px;height: auto;">
 										<input type="text" class="form-control mr-3" placeholder="Add your feedback"
-											th:id="|content${service.key.key.serviceID}|">
+											th:id="|content${service.key.serviceID}|">
 										<button class="btn" style="background-color: black; color: #fafafa;"
 											type="button"
-											th:onclick="|addFeedback(${service.key.key.serviceID})|">Gửi</button>
+											th:onclick="|addFeedback(${service.key.serviceID})|">Gửi</button>
 									</div>
 									<div>
 										<div class="media g-mb-30 media-comment noneComment"
-											th:id="|noneComment${service.key.key.serviceID}|"
-											th:hidden="${not service.key.value.isEmpty()}">
+											th:id="|noneComment${service.key.serviceID}|"
+											th:hidden="${not service.value.isEmpty()}">
 											<p>Không có bình luận.</p>
 										</div>
 									</div>
-									<div th:each="feedback : ${service.key.value}">
+									<div th:each="feedback : ${service.value}">
 										<div class="media g-mb-30 media-comment"
 											th:id="|feedback${feedback.feedbackID}|">
 											<img class="rounded-circle shadow-1-strong me-3"
@@ -661,8 +661,6 @@
 			</div>
 		</div>
 	</div>
-
-
 
 
 	<section class="ftco-section ftco-about img" style="background-image: url(images/bg_4.jpg);">

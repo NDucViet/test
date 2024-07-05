@@ -2,7 +2,6 @@ package com.KDLST.Manager.Config;
 
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -39,7 +38,7 @@ public class RoleFilter implements Filter {
             "/cart/checkOut", "/cart/vnpay-payment-return", "/cart/history",
             "/service/addFeedback",
             "/service/deleteFeedback", "/blog/submitComment", "/hotel/", "/css",
-            "/images", "/js", "/user/403"));
+            "/images", "/js", "/user/403","/ticket/rating"));
 
     private static final List<String> EMPLOY_PATH = new CopyOnWriteArrayList<>(Arrays.asList(
             "/employee/", "/employee/addBlog", "/employee/addBlog/action", "/css",
@@ -105,7 +104,6 @@ public class RoleFilter implements Filter {
     }
 
     private boolean isUserPath(String path) {
-        System.out.println(path);
         return USER_PATH.stream().anyMatch(path::equals);
     }
 

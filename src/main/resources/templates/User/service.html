@@ -18,7 +18,7 @@
   <link rel="stylesheet" type="text/css" th:href="@{../css/owl.carousel.min.css}">
   <link rel="stylesheet" type="text/css" th:href="@{../fonts/ionicons/css/ionicons.min.css}">
   <link rel="stylesheet" type="text/css" th:href="@{../fonts/fontawesome/css/font-awesome.min.css}">
-
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
   <link rel="stylesheet" type="text/css" th:href="@{../css/animate.css}">
   <link rel="stylesheet" type="text/css" th:href="@{../css/aos.css}">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
@@ -46,6 +46,8 @@
       max-width: 300px;
     }
 
+
+    /* Giữ lại các thuộc tính đã có */
     .trigger {
       background-color: black;
       color: red;
@@ -163,6 +165,32 @@
       }
     }
 
+    .pagination {
+      display: flex;
+      justify-content: center;
+      padding-left: 0;
+      list-style: none;
+    }
+
+    /* .pagination li {
+    display: inline-block;
+    margin: 0 5px;
+  }
+
+  .pagination li a {
+    color: #007bff;
+    text-decoration: none;
+    padding: 8px 12px;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+  }
+
+  .pagination li.active a {
+    background-color: #007bff;
+    color: white;
+    border-color: #007bff;
+  } */
+
     .truncate {
       display: block;
       overflow: hidden;
@@ -201,18 +229,18 @@
         <th:block th:each="service : ${serviceList}">
           <div class="col-md-4 ftco-animate">
             <div class="project-wrap">
-              <a href="#" class="img" th:style="'background-image: url(images/' + ${service.key.key.image} + ');'">
+              <a href="#" class="img" th:style="'background-image: url(images/' + ${service.key.image} + ');'">
               </a>
               <div class="text p-4">
                 <h3>
                   <button class="location" data-bs-toggle="modal"
-                    th:data-bs-target="'#modal' + ${service.key.key.serviceID}" th:text="${service.key.key.serviceName}"
+                    th:data-bs-target="'#modal' + ${service.key.serviceID}" th:text="${service.key.serviceName}"
                     style="border: none; background-color: white;"></button>
                 </h3>
-                <p class="location"><span class="fa fa-map-marker"></span> [[${service.key.key.description}]]</p>
+                <p class="location"><span class="fa fa-map-marker"></span> [[${service.key.description}]]</p>
                 <ul>
                   <li><span class="flaticon-mountains"></span>
-                    <a href="#" th:text="${service.key.key.serviceTypeID.serviceName}"></a>
+                    <a href="#" th:text="${service.key.serviceTypeID.serviceName}"></a>
                   </li>
                 </ul>
               </div>
@@ -221,26 +249,20 @@
         </th:block>
       </div>
       <div th:each="service : ${serviceList}">
-        <div class="modal fade" th:id="'modal' + ${service.key.key.serviceID}" tabindex="-1" role="dialog"
+        <div class="modal fade" th:id="'modal' + ${service.key.serviceID}" tabindex="-1" role="dialog"
           aria-labelledby="exampleModalLabel" aria-hidden="true">
           <div class="modal-dialog" role="document">
             <div class="modal-content">
-              <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
               <div class="modal-body p-0 row">
                 <div class="col-12 col-lg-4 ad p-0">
-                  <img th:src="@{/images/{image}(image=${service.key.key.image})}" class="modal-image">
+                  <img th:src="@{/images/{image}(image=${service.key.image})}" class="modal-image">
                 </div>
                 <div class="details col-12 col-lg-8">
                   <div class="heading d-flex">
-                    <h3 th:text="${service.key.key.serviceTypeID.serviceName}"></h3>
+                    <h3 th:text="${service.key.serviceTypeID.serviceName}"></h3>
                   </div>
-                  <h3 style="color: black; cursor: pointer;" th:text="${service.key.key.serviceName}"></h3>
-                  <p><small class="text-muted" th:text="${service.key.key.description}"></small></p>
-                  <div class="text-muted hurry"><small>Hurry. book now. Limited time offer</small></div>
+                  <h3 style="color: black; cursor: pointer;" th:text="${service.key.serviceName}"></h3>
+                  <p><small class="text-muted" th:text="${service.key.description}"></small></p>
                   <div class="d-flex mt-2 mb-5">
                     <div style="padding-top: 20px;">
                       <hr style="background-color: black;">
@@ -255,18 +277,17 @@
                         <img class="img-fluid img-responsive rounded-circle mr-2"
                           th:src="@{'/images/'+ ${session.user.avatar}}" style="width: 38px;height: auto;">
                         <input type="text" class="form-control mr-3" placeholder="Add your feedback"
-                          th:id="|content${service.key.key.serviceID}|">
+                          th:id="|content${service.key.serviceID}|">
                         <button class="btn" style="background-color: black; color: #fafafa;" type="button"
-                          th:onclick="|addFeedback(${service.key.key.serviceID})|">Gửi</button>
+                          th:onclick="|addFeedback(${service.key.serviceID})|">Gửi</button>
                       </div>
                       <div>
                         <div class="media g-mb-30 media-comment noneComment"
-                          th:id="|noneComment${service.key.key.serviceID}|"
-                          th:hidden="${not service.key.value.isEmpty()}">
+                          th:id="|noneComment${service.key.serviceID}|" th:hidden="${not service.value.isEmpty()}">
                           <p>Không có bình luận.</p>
                         </div>
                       </div>
-                      <div th:each="feedback : ${service.key.value}">
+                      <div th:each="feedback : ${service.value}">
                         <div class="media g-mb-30 media-comment" th:id="|feedback${feedback.feedbackID}|">
                           <img class="rounded-circle shadow-1-strong me-3"
                             th:src="@{'/images/'+${feedback.user.avatar}}"
@@ -318,7 +339,9 @@
   </section>
 
   <footer th:insert="~{User/footer :: footer}"></footer>
-
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <!-- Bootstrap Bundle JS (includes Popper) -->
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
   <script src="js/jquery-3.3.1.min.js"></script>
   <script src="js/jquery-migrate-3.0.1.min.js"></script>
   <script src="js/popper.min.js"></script>

@@ -80,12 +80,23 @@
                                                                 <td> [[${billDetail.ticketID.price}]]</td>
                                                                 <td> [[${billDetail.quantity}]]</td>
                                                                 <td> [[${billDetail.total}]]</td>
-                                                                <td th:if="${billDetail.billID.status == true}">Chưa sử
+                                                                <td th:if="${billDetail.status == 0}">Chưa sử
                                                                     dụng</td>
-                                                                <td th:if="${billDetail.billID.status == false}">Đã sử
+                                                                <td th:if="${billDetail.status == 1}" class="status">Đã
+                                                                    sử
                                                                     dụng</td>
-                                                                <td th:if="${billDetail.billID.status == false}"><a>Đánh
-                                                                        Giá</a></td>
+                                                                <td th:if="${billDetail.status == 2}" class="status">Đã
+                                                                    đánh
+                                                                    giá</td>
+
+                                                                <td th:if="${billDetail.status == 1}">
+                                                                    <button
+                                                                        class="btn btn-primary btn-sm rounded-pill px-2 py-1 position-relative"
+                                                                        data-toggle="modal"
+                                                                        th:data-target="|#RatingModal-${billDetail.billID.billID}-${billDetail.ticketID.ticketID}|">
+                                                                        <i class="fas fa-star me-1"></i>Đánh giá
+                                                                    </button>
+                                                                </td>
                                                             </tr>
                                                         </th:block>
                                                     </tbody>
@@ -107,91 +118,96 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
-                                aria-labelledby="exampleModalCenterTitle" aria-hidden="true"
-                                th:each="billDetail : ${history.key}">
-                                <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-                                    <div class="modal-content rounded-0">
-                                        <div class="modal-body py-0">
-                                            <div class="d-flex main-content">
-                                                <div class="bg-image promo-img mr-3"
-                                                    style="background-image: url('images/image_1.jpg');">
-                                                    <span class="price">$2000</span>
-                                                </div>
-                                                <div class="content-text p-4 px-5 align-item-stretch">
-                                                    <div class="text-center">
-                                                        <h3 class="mb-3 line">Grand Prix 4000</h3>
-
-                                                        <p class="mb-3"></p>
-
-                                                        <p class="mb-3">
-                                                            <span class="star-rating">
-                                                                <label
-                                                                    for="|rate-${bill.key.id}-${billProBox.key.book.id}-1|"
-                                                                    style="--i:1"><i
-                                                                        class="fa-solid fa-star"></i></label>
-                                                                <input type="radio" name="rating"
-                                                                    id="|rate-${bill.key.id}-${billProBox.key.book.id}-1|"
-                                                                    value="1" checked>
-
-                                                                <label
-                                                                    for="|rate-${bill.key.id}-${billProBox.key.book.id}-2|"
-                                                                    style="--i:2"><i
-                                                                        class="fa-solid fa-star"></i></label>
-                                                                <input type="radio" name="rating"
-                                                                    id="|rate-${bill.key.id}-${billProBox.key.book.id}-2|"
-                                                                    value="2">
-
-                                                                <label
-                                                                    for="|rate-${bill.key.id}-${billProBox.key.book.id}-3|"
-                                                                    style="--i:3"><i
-                                                                        class="fa-solid fa-star"></i></label>
-                                                                <input type="radio" name="rating"
-                                                                    id="|rate-${bill.key.id}-${billProBox.key.book.id}-3|"
-                                                                    value="3">
-
-                                                                <label
-                                                                    for="|rate-${bill.key.id}-${billProBox.key.book.id}-4|"
-                                                                    style="--i:4"><i
-                                                                        class="fa-solid fa-star"></i></label>
-                                                                <input type="radio" name="rating"
-                                                                    id="|rate-${bill.key.id}-${billProBox.key.book.id}-4|"
-                                                                    value="4">
-
-                                                                <label
-                                                                    for="|rate-${bill.key.id}-${billProBox.key.book.id}-5|"
-                                                                    style="--i:5"><i
-                                                                        class="fa-solid fa-star"></i></label>
-                                                                <input type="radio" name="rating"
-                                                                    id="|rate-${bill.key.id}-${billProBox.key.book.id}-5|"
-                                                                    value="5">
-                                                            </span>
-                                                        </p>
-
-                                                        <div class="d-flex text-center social w-50 mx-auto">
-                                                            <button class="btn btn-success">
-                                                                Gửi đánh giá
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                         </th:block>
                     </div>
                 </div>
             </div>
         </div>
     </section>
-<<<<<<< HEAD
-=======
 
+    <div th:each="history: ${history}">
+        <div class="modal fade" th:id="|RatingModal-${billDetail.billID.billID}-${billDetail.ticketID.ticketID}|"
+            tabindex="-1" role="dialog" aria-hidden="true" th:each="billDetail : ${history.key}">
+            <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+                <div class="modal-content rounded-0">
+                    <div class="modal-body py-0">
+                        <div class="d-flex main-content">
+                            <div class="bg-image promo-img mr-3"
+                                th:style="'background-image: url(images/' + ${billDetail.ticketID.image} + ');'">
+                            </div>
+                            <div class="content-text p-4 px-5 align-item-stretch" style="width: 100%;">
+                                <div class="text-center">
+                                    <h3 class="mb-3 line" th:text="${billDetail.ticketID.title}"></h3>
 
+                                    <h5 class="price mb-3" th:text="${billDetail.ticketID.price}+' VND/1'"
+                                        style="color: #faec1b;"></h5>
 
->>>>>>> 506d004125583a040d526154b3761f854a96afd1
+                                    <p class="mb-3" th:text="${billDetail.ticketID.description}"></p>
+
+                                    <p class="mb-3">
+                                        <span class="star-rating">
+                                            <label
+                                                th:for="|rate-${billDetail.billID.billID}-${billDetail.ticketID.ticketID}-1|"
+                                                style="--i:1"><i class="fa-solid fa-star"></i></label>
+                                            <input type="radio"
+                                                th:name="|rating-${billDetail.billID.billID}-${billDetail.ticketID.ticketID}|"
+                                                th:id="|rate-${billDetail.billID.billID}-${billDetail.ticketID.ticketID}-1|"
+                                                value="1" checked>
+
+                                            <label
+                                                th:for="|rate-${billDetail.billID.billID}-${billDetail.ticketID.ticketID}-2|"
+                                                style="--i:2"><i class="fa-solid fa-star"></i></label>
+                                            <input type="radio"
+                                                th:name="|rating-${billDetail.billID.billID}-${billDetail.ticketID.ticketID}|"
+                                                th:id="|rate-${billDetail.billID.billID}-${billDetail.ticketID.ticketID}-2|"
+                                                value="2">
+
+                                            <label
+                                                th:for="|rate-${billDetail.billID.billID}-${billDetail.ticketID.ticketID}-3|"
+                                                style="--i:3"><i class="fa-solid fa-star"></i></label>
+                                            <input type="radio"
+                                                th:name="|rating-${billDetail.billID.billID}-${billDetail.ticketID.ticketID}|"
+                                                th:id="|rate-${billDetail.billID.billID}-${billDetail.ticketID.ticketID}-3|"
+                                                value="3">
+
+                                            <label
+                                                th:for="|rate-${billDetail.billID.billID}-${billDetail.ticketID.ticketID}-4|"
+                                                style="--i:4"><i class="fa-solid fa-star"></i></label>
+                                            <input type="radio"
+                                                th:name="|rating-${billDetail.billID.billID}-${billDetail.ticketID.ticketID}|"
+                                                th:id="|rate-${billDetail.billID.billID}-${billDetail.ticketID.ticketID}-4|"
+                                                value="4">
+
+                                            <label
+                                                th:for="|rate-${billDetail.billID.billID}-${billDetail.ticketID.ticketID}-5|"
+                                                style="--i:5"><i class="fa-solid fa-star"></i></label>
+                                            <input type="radio"
+                                                th:name="|rating-${billDetail.billID.billID}-${billDetail.ticketID.ticketID}|"
+                                                th:id="|rate-${billDetail.billID.billID}-${billDetail.ticketID.ticketID}-5|"
+                                                value="5">
+                                        </span>
+                                    </p>
+
+                                    <div class="d-flex text-center social w-50 mx-auto">
+                                        <button class="btn btn-success" style="background-color: #f15d30 ;"
+                                            th:onclick="|ratingTicket(${billDetail.billID.billID},${billDetail.ticketID.ticketID},${billDetail.billDetailsID})|">
+                                            Gửi đánh giá
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="popchat">
+        <i class="fa-solid fa-square-check"></i>
+        Cảm ơn vì đã sử dụng dịch vụ của chúng tôi
+    </div>
+
     <script src="js/jquery.min1.js"></script>
     <script src="js/jquery-migrate-3.0.1.min1.js"></script>
     <script src="js/popper.min1.js"></script>
@@ -208,6 +224,48 @@
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
     <script src="js/google-map1.js"></script>
     <script src="js/main1.js"></script>
+    <script>
+        //Đánh giá sản phẩm
+        function ratingTicket(idBill, idTicket, idBillDetail) {
+            const pop = document.querySelector("#popchat");
+            // Get the selected rating score
+            const score = document.querySelector('input[name="rating-' + idBill + '-' + idTicket + '"]:checked').value;
+
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "/ticket/rating?idTicket=" + idTicket + "&score=" + score + "&idBillDetail=" + idBillDetail, true);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    // Phản hồi thành công
+                    console.log(xhr.responseText);
+
+                    pop.classList.add("active");
+                    setTimeout(() => {
+                        pop.classList.remove("active");
+                    }, 2000);
+
+                    // Close the modal
+                    const modal = document.querySelector("#RatingModal-" + idBill + "-" + idTicket);
+                    if (modal) {
+                        $(modal).modal('hide');
+                    }
+
+                    // Update the status
+                    const statusCell = document.querySelector('button[data-target="#RatingModal-' + idBill + '-' + idTicket + '"]').closest('tr').querySelector('.status');
+                    if (statusCell) {
+                        statusCell.innerText = 'Đã đánh giá';
+                    }
+
+                    // Hide the rating button
+                    const ratingButton = document.querySelector('button[data-target="#RatingModal-' + idBill + '-' + idTicket + '"]');
+                    if (ratingButton) {
+                        ratingButton.style.display = 'none';
+                    }
+                }
+            };
+            xhr.send();
+        }
+
+    </script>
 </body>
 
 </html>

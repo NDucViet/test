@@ -2,7 +2,6 @@ package com.KDLST.Manager.Controller;
 
 import com.KDLST.Manager.Model.Entity.Bill.BillDetails;
 import com.KDLST.Manager.Model.Entity.BookingRoom.BookingRoomDetails;
-import com.KDLST.Manager.Model.Entity.ServiceProject.ServiceType;
 import com.KDLST.Manager.Model.Service.BillService.BillDetailsService;
 import com.KDLST.Manager.Model.Service.BillService.BillDetailsServiceImplement;
 import com.KDLST.Manager.Model.Service.BillService.BillService;
